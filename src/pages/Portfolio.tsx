@@ -209,7 +209,7 @@ export default function Portfolio() {
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur">
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <a href="#home" className="font-semibold tracking-wide">
-            {githubUsername eiei
+            {githubUsername}
             <span className="text-violet-400">.</span>
           </a>
 
