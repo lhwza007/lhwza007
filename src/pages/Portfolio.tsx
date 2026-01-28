@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import type { FormEvent } from "react";
+import emailjs from '@emailjs/browser';
+import Toast from '../components/Toast';
 import { FaJava } from "react-icons/fa";
 import {
   SiHtml5,
@@ -7,7 +10,6 @@ import {
   SiTypescript,
   SiPhp,
   SiPython,
-
   SiDart,
   SiVite,
   SiReact,
@@ -197,6 +199,79 @@ const TechIcon = ({
 };
 
 export default function Portfolio() {
+  const form = useRef<HTMLFormElement>(null);
+  const [toast, setToast] = useState<{
+    show: boolean;
+    message: string;
+    type: "success" | "error" | "info";
+  }>({ show: false, message: "", type: "info" });
+
+  const showToast = (message: string, type: "success" | "error" | "info") => {
+    setToast({ show: true, message, type });
+  };
+
+  const closeToast = () => {
+    setToast({ show: false, message: "", type: "info" });
+  };
+  const sendEmail = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // เช็คก่อนว่ามี form หรือยัง (ป้องกัน error)
+    if (!form.current) {
+      showToast("เกิดข้อผิดพลาด กรุณาลองใหม่", "error");
+      return;
+    }
+
+    // ดึงค่าจาก form
+    const formData = new FormData(form.current);
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const message = formData.get('message') as string;
+
+    // ตรวจสอบว่าทุกฟิลด์มีค่า
+    if (!name || !name.trim()) {
+      showToast("กรุณากรอกชื่อของคุณ", "error");
+      return;
+    }
+
+    if (!email || !email.trim()) {
+      showToast("กรุณากรอกอีเมล", "error");
+      return;
+    }
+
+    if (!message || !message.trim()) {
+      showToast("กรุณากรอกข้อความ", "error");
+      return;
+    }
+
+    // ตรวจสอบรูปแบบอีเมล
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showToast("กรุณากรอกอีเมลให้ถูกต้อง", "error");
+      return;
+    }
+
+    emailjs
+      .sendForm(
+        'service_e94dlab',
+        'template_dj1nbz3',
+        form.current,
+        {
+          publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+        }
+      )
+      .then(
+        (result) => {
+          console.log('SUCCESS!', result.text);
+          showToast("ส่งข้อความสำเร็จ! เราจะติดต่อกลับเร็วๆ นี้", "success");
+          form.current?.reset();
+        },
+        (error) => {
+          console.log('FAILED...', error.text);
+          showToast("เกิดข้อผิดพลาดในการส่งข้อความ กรุณาลองใหม่อีกครั้ง", "error");
+        }
+      );
+  };
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Background glow */}
@@ -301,19 +376,19 @@ export default function Portfolio() {
             {/* Profile Card */}
             <GlassCard className="p-6 md:p-8">
               <div className="flex items-center gap-4">
-  <div className="h-14 w-14 overflow-hidden rounded-2xl ring-1 ring-violet-400/20">
-    <img
-      src="/profile.jpg"
-      alt="Avatar"
-      className="h-full w-full object-cover"
-    />
-  </div>
+                <div className="h-14 w-14 overflow-hidden rounded-2xl ring-1 ring-violet-400/20">
+                  <img
+                    src="/profile.jpg"
+                    alt="Avatar"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
 
-  <div>
-    <h2 className="font-semibold text-xl">Mark Ratchanon Asasri</h2>
-    <p className="text-sm text-zinc-400">Fullstack Developer • Thailand</p>
-  </div>
-</div>
+                <div>
+                  <h2 className="font-semibold text-xl">Mark Ratchanon Asasri</h2>
+                  <p className="text-sm text-zinc-400">Fullstack Developer • Thailand</p>
+                </div>
+              </div>
 
               <div className="mt-6 space-y-3 text-sm text-zinc-300">
                 <div className="flex items-center justify-between">
@@ -521,26 +596,27 @@ export default function Portfolio() {
                 </p>
 
                 <form
+                  ref={form}
                   className="mt-4 space-y-3"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    alert("Demo form: connect to backend/email service.");
-                  }}
+                  onSubmit={sendEmail}
                 >
                   <input
                     className="w-full rounded-xl border border-white/10 bg-black/60 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/30"
                     placeholder="Your name"
+                    name='name'
                   />
                   <input
                     className="w-full rounded-xl border border-white/10 bg-black/60 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/30"
                     placeholder="Email"
+                    name='email'
                   />
                   <textarea
                     className="h-28 w-full resize-none rounded-xl border border-white/10 bg-black/60 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/30"
                     placeholder="Message"
+                    name='message'
                   />
                   <button
-                    className="w-full rounded-xl bg-violet-500 px-4 py-3 text-sm font-semibold text-black hover:bg-violet-400"
+                    className="w-full rounded-xl bg-violet-500 px-4 py-3 text-sm font-semibold text-black hover:bg-violet-400 cursor-pointer"
                     type="submit"
                   >
                     Send Message
@@ -553,10 +629,19 @@ export default function Portfolio() {
 
         {/* Footer */}
         <footer className="py-10 text-center text-xs text-zinc-500">
-          © {new Date().getFullYear()} {githubUsername} • Built with React +
+          © {new Date().getFullYear()} {githubUsername} • Mark Ratchanon Arsasri • Fullstack Developer • Built with React +
           Tailwind
         </footer>
       </main>
+
+      {/* Toast Notification */}
+      {toast.show && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={closeToast}
+        />
+      )}
     </div>
   );
 }
