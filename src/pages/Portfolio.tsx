@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, type FormEvent } from "react";
+import emailjs from "@emailjs/browser";
 import { FaJava } from "react-icons/fa";
 import {
   SiHtml5,
@@ -7,7 +8,9 @@ import {
   SiTypescript,
   SiPhp,
   SiPython,
-
+  SiAmazonwebservices,
+  SiCloudinary,
+  SiVercel,
   SiDart,
   SiVite,
   SiReact,
@@ -53,26 +56,56 @@ const githubUsername = "lhwza007";
 
 const projects: Project[] = [
   {
-    title: "E-Commerce Platform",
+    title: "E-Commerce Platform (Mini Project)",
     description:
-      "Fullstack e-commerce system with admin dashboard, payment, and order tracking.",
-    tags: ["React", "Node.js", "REST API", "MongoDB", "Docker"],
-    github: `https://github.com/${githubUsername}`,
+      "Fullstack e-commerce system with admin dashboard and order tracking.",
+    tags: ["PHP", "SQL", "Bootstrap", "PHPMyAdmin"],
+    github: `https://github.com/lhwza007/LazadoProject`,
   },
   {
-    title: "SaaS Landing + Auth",
+    title: "Thesis Advisor Matching System (Mini Project)",
     description:
-      "Modern SaaS landing page with authentication, subscription, and user dashboard.",
-    tags: ["Next.js", "TypeScript", "Tailwind", "REST API"],
-    github: `https://github.com/${githubUsername}`,
+      "A fullstack system that matches students with thesis advisors based on shared research interests, featuring an executive dashboard for data tracking.",
+    tags: ["PHP", "SQL", "Bootstrap", "PHPMyAdmin"],
+    github: `https://github.com/Anadyts/AdvisorHub`,
   },
   {
-    title: "Company CRM",
+    title:"Travel Planner (Mini Project)",
     description:
-      "Internal CRM with role-based access, sales pipelines, and activity logging.",
-    tags: ["React", "Express", "MySQL", "Cloudflare"],
-    github: `https://github.com/${githubUsername}`,
+      "A smart travel platform featuring automated park data scraping and LLM-based data cleaning, with personalized AI recommendations and collaborative trip planning tools.",
+    tags: ["React", "Node.js", "REST API", "MySQL"],
+    github: `https://github.com/lhwza007/Travel-Planner`,
   },
+  {
+    title:"One Siam (Production)",
+    description:
+      "Main website of One Siam, a company that sells products and services to the public.",
+    tags: ["PHP", "SQL", "PHPMyAdmin", "Docker", "GitLab CI"],
+    demo: `https://onesiam.co.th/`,
+  },
+  {
+    title:"One Siam Factory (Production)",
+    description:
+      "A business-tailored web application featuring a product catalog system, secure user onboarding via Clerk, and automated order updates powered by LINE Messaging API.",
+    tags: ["React", "MongoDB", "Tailwind CSS", "Clerk", "LINE Messaging API","REST API"],
+    demo: `https://www.onesiamfactory.com/`,
+  },
+  {
+    title:"Arisza Thailand (Production)",
+    description:
+      "A corporate website for a comprehensive business advisory service, highly optimized for SEO to drive organic traffic and maximize online brand authority.",
+    tags: ["React", "MongoDB", "Tailwind CSS", "REST API", "SEO Focused"],
+    demo: `https://www.ariszathailand.com/`,
+  },
+  {
+    title:"E-Learning Platform (Development)",
+    description:
+      "An e-learning platform currently in development, built with Next.js and Supabase, featuring secure user onboarding via integrated Google Authentication. ",
+    tags: ["Next.js", "SQL","Supabase", "Webhook" ],
+    demo: `https://academy.ariszathailand.com/`,
+  },
+
+  
 ];
 
 const techStack: TechGroup[] = [
@@ -134,7 +167,11 @@ const techStack: TechGroup[] = [
       { name: "Docker", icon: <SiDocker /> },
       { name: "Cloudflare", icon: <SiCloudflare /> },
       { name: "Figma", icon: <SiFigma /> },
+      { name: "AWS EC2", icon: <SiAmazonwebservices /> },
+      { name: "Cloudinary", icon: <SiCloudinary /> },
+      { name: "Vercel", icon: <SiVercel /> },
     ],
+    
   },
 ];
 
@@ -196,7 +233,60 @@ const TechIcon = ({
   );
 };
 
+type ContactFormState = {
+  name: string;
+  email: string;
+  message: string;
+};
+
+type SubmitStatus = "idle" | "sending" | "success" | "error";
+
 export default function Portfolio() {
+  const [contactForm, setContactForm] = useState<ContactFormState>({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
+  const [submitError, setSubmitError] = useState("");
+
+  const handleContactSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    if (!serviceId || !templateId || !publicKey) {
+      setSubmitStatus("error");
+      setSubmitError(
+        "Email service is not configured. Add EmailJS keys to your .env file."
+      );
+      return;
+    }
+
+    setSubmitStatus("sending");
+    setSubmitError("");
+
+    try {
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: contactForm.name,
+          reply_to: contactForm.email,
+          message: contactForm.message,
+        },
+        { publicKey }
+      );
+      setContactForm({ name: "", email: "", message: "" });
+      setSubmitStatus("success");
+    } catch {
+      setSubmitStatus("error");
+      setSubmitError("Failed to send message. Please try again later.");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Background glow */}
@@ -244,7 +334,64 @@ export default function Portfolio() {
         {/* Hero */}
         <section id="home" className="py-16 md:py-24">
           <div className="grid gap-10 md:grid-cols-2 md:items-center">
-            <div>
+            {/* Profile Card */}
+            <GlassCard className="order-2 p-6 md:order-1 md:p-8">
+              <div className="flex flex-col items-center text-center">
+                <div className="relative">
+                  <div
+                    className="absolute -inset-1 rounded-3xl bg-gradient-to-br from-violet-500/60 via-fuchsia-500/40 to-violet-600/60 blur-md"
+                    aria-hidden
+                  />
+                  <div className="relative h-36 w-36 md:h-44 md:w-44 overflow-hidden rounded-3xl ring-2 ring-violet-400/40 ring-offset-2 ring-offset-zinc-950 shadow-[0_8px_32px_rgba(139,92,246,0.25)]">
+                    <img
+                      src="/profile.jpg"
+                      alt="Mark Ratchanon Asasri"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                </div>
+
+                <h2 className="mt-5 font-semibold text-xl md:text-2xl">
+                  Mark Ratchanon Asasri
+                </h2>
+                <p className="mt-1 text-sm text-zinc-400">
+                  Fullstack Developer
+                </p>
+              </div>
+
+              <div className="mt-6 space-y-3 text-sm text-zinc-300">
+                <div className="flex items-center justify-between">
+                  <span className="text-zinc-400">Focus</span>
+                  <span>Fullstack Web</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-zinc-400">Stack</span>
+                  <span className="text-violet-300">React + Node.js</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-zinc-400">GitHub</span>
+                  <a
+                    className="text-violet-200 hover:text-violet-100"
+                    href={`https://github.com/${githubUsername}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    @{githubUsername}
+                  </a>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <a
+                  href="#contact"
+                  className="block w-full rounded-xl bg-violet-500 px-4 py-3 text-center text-sm font-semibold text-black hover:bg-violet-400"
+                >
+                  Let’s Work Together
+                </a>
+              </div>
+            </GlassCard>
+
+            <div className="order-1 md:order-2">
               <p className="text-sm text-zinc-400">
                 Fullstack Developer • React • Node.js
               </p>
@@ -297,55 +444,6 @@ export default function Portfolio() {
                 )}
               </div>
             </div>
-
-            {/* Profile Card */}
-            <GlassCard className="p-6 md:p-8">
-              <div className="flex items-center gap-4">
-  <div className="h-14 w-14 overflow-hidden rounded-2xl ring-1 ring-violet-400/20">
-    <img
-      src="/profile.jpg"
-      alt="Avatar"
-      className="h-full w-full object-cover"
-    />
-  </div>
-
-  <div>
-    <h2 className="font-semibold text-xl">Mark Ratchanon Asasri</h2>
-    <p className="text-sm text-zinc-400">Fullstack Developer • Thailand</p>
-  </div>
-</div>
-
-              <div className="mt-6 space-y-3 text-sm text-zinc-300">
-                <div className="flex items-center justify-between">
-                  <span className="text-zinc-400">Focus</span>
-                  <span>Fullstack Web</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-zinc-400">Stack</span>
-                  <span className="text-violet-300">React + Node.js</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-zinc-400">GitHub</span>
-                  <a
-                    className="text-violet-200 hover:text-violet-100"
-                    href={`https://github.com/${githubUsername}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    @{githubUsername}
-                  </a>
-                </div>
-              </div>
-
-              <div className="mt-6">
-                <a
-                  href="#contact"
-                  className="block w-full rounded-xl bg-violet-500 px-4 py-3 text-center text-sm font-semibold text-black hover:bg-violet-400"
-                >
-                  Let’s Work Together
-                </a>
-              </div>
-            </GlassCard>
           </div>
         </section>
 
@@ -445,7 +543,7 @@ export default function Portfolio() {
                       rel="noreferrer"
                       className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-zinc-200"
                     >
-                      Live Demo
+                      View
                     </a>
                   )}
                 </div>
@@ -465,15 +563,11 @@ export default function Portfolio() {
             <ol className="space-y-6">
               {[
                 {
-                  year: "2024 - Present",
-                  title: "Fullstack Developer (Freelance)",
-                  desc: "SaaS, admin dashboard, API systems, deployments.",
+                  year: "2025 - 2026",
+                  title: "Fullstack Developer (co-operative) - ONE SIAM.,LTD",
+                  desc: "Production web apps, API systems, API integration, deployments and performance optimization",
                 },
-                {
-                  year: "2022 - 2024",
-                  title: "Web Developer",
-                  desc: "Production web apps, API integration, performance optimization.",
-                },
+                
               ].map((item) => (
                 <li key={item.year} className="flex gap-4">
                   <div className="mt-1 h-3 w-3 rounded-full bg-violet-400 shadow-[0_0_0_4px_rgba(167,139,250,0.15)]" />
@@ -520,30 +614,64 @@ export default function Portfolio() {
                   Quick Message<span className="text-violet-400">.</span>
                 </p>
 
-                <form
-                  className="mt-4 space-y-3"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    alert("Demo form: connect to backend/email service.");
-                  }}
-                >
+                <form className="mt-4 space-y-3" onSubmit={handleContactSubmit}>
                   <input
                     className="w-full rounded-xl border border-white/10 bg-black/60 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/30"
                     placeholder="Your name"
+                    name="name"
+                    value={contactForm.name}
+                    onChange={(e) =>
+                      setContactForm((prev) => ({
+                        ...prev,
+                        name: e.target.value,
+                      }))
+                    }
+                    required
+                    disabled={submitStatus === "sending"}
                   />
                   <input
                     className="w-full rounded-xl border border-white/10 bg-black/60 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/30"
                     placeholder="Email"
+                    type="email"
+                    name="email"
+                    value={contactForm.email}
+                    onChange={(e) =>
+                      setContactForm((prev) => ({
+                        ...prev,
+                        email: e.target.value,
+                      }))
+                    }
+                    required
+                    disabled={submitStatus === "sending"}
                   />
                   <textarea
                     className="h-28 w-full resize-none rounded-xl border border-white/10 bg-black/60 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/30"
                     placeholder="Message"
+                    name="message"
+                    value={contactForm.message}
+                    onChange={(e) =>
+                      setContactForm((prev) => ({
+                        ...prev,
+                        message: e.target.value,
+                      }))
+                    }
+                    required
+                    disabled={submitStatus === "sending"}
                   />
+                  {submitStatus === "success" && (
+                    <p className="text-sm text-emerald-400">
+                      Message sent successfully. I&apos;ll get back to you soon.
+                    </p>
+                  )}
+                  {submitStatus === "error" && submitError && (
+                    <p className="text-sm text-red-400">{submitError}</p>
+                  )}
                   <button
-                    className="w-full rounded-xl bg-violet-500 px-4 py-3 text-sm font-semibold text-black hover:bg-violet-400"
+                    className="w-full rounded-xl bg-violet-500 px-4 py-3 text-sm font-semibold text-black hover:bg-violet-400 disabled:cursor-not-allowed disabled:opacity-60"
                     type="submit"
+                    disabled={submitStatus === "sending"}
                   >
-                    Send Message
+                    {submitStatus === "sending" ? "Sending..." : "Send Message"}
                   </button>
                 </form>
               </div>
@@ -553,8 +681,7 @@ export default function Portfolio() {
 
         {/* Footer */}
         <footer className="py-10 text-center text-xs text-zinc-500">
-          © {new Date().getFullYear()} {githubUsername} • Built with React +
-          Tailwind
+          © {new Date().getFullYear()} {githubUsername} • Mark Ratchanon Asasri
         </footer>
       </main>
     </div>
