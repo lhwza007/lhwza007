@@ -344,7 +344,7 @@ export default function Portfolio() {
                   />
                   <div className="relative h-36 w-36 md:h-44 md:w-44 overflow-hidden rounded-3xl ring-2 ring-violet-400/40 ring-offset-2 ring-offset-zinc-950 shadow-[0_8px_32px_rgba(139,92,246,0.25)]">
                     <img
-                      src="/profile.jpg"
+                      src="/profile2.jpg"
                       alt="Mark Ratchanon Asasri"
                       className="h-full w-full object-cover"
                     />
