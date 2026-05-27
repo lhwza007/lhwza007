@@ -835,10 +835,10 @@ export default function Portfolio() {
                 <form className="mt-4 space-y-3" onSubmit={handleContactSubmit}>
                   <input
                     className={cn(
-                      "w-full rounded-xl border px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/30",
+                      "w-full rounded-xl border px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/30 placeholder-zinc-400",
                       isLightMode
-                        ? "border-violet-200 bg-white text-zinc-900"
-                        : "border-white/10 bg-black/60"
+                        ? "border-violet-200 bg-white text-zinc-900 placeholder-zinc-500"
+                        : "border-white/10 bg-black/60 text-white placeholder-zinc-500"
                     )}
                     placeholder="Your name"
                     name="name"
@@ -854,10 +854,10 @@ export default function Portfolio() {
                   />
                   <input
                     className={cn(
-                      "w-full rounded-xl border px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/30",
+                      "w-full rounded-xl border px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/30 placeholder-zinc-400",
                       isLightMode
-                        ? "border-violet-200 bg-white text-zinc-900"
-                        : "border-white/10 bg-black/60"
+                        ? "border-violet-200 bg-white text-zinc-900 placeholder-zinc-500"
+                        : "border-white/10 bg-black/60 text-white placeholder-zinc-500"
                     )}
                     placeholder="Email"
                     type="email"
@@ -874,10 +874,10 @@ export default function Portfolio() {
                   />
                   <textarea
                     className={cn(
-                      "h-28 w-full resize-none rounded-xl border px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/30",
+                      "h-28 w-full resize-none rounded-xl border px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/30 placeholder-zinc-400",
                       isLightMode
-                        ? "border-violet-200 bg-white text-zinc-900"
-                        : "border-white/10 bg-black/60"
+                        ? "border-violet-200 bg-white text-zinc-900 placeholder-zinc-500"
+                        : "border-white/10 bg-black/60 text-white placeholder-zinc-500"
                     )}
                     placeholder="Message"
                     name="message"
