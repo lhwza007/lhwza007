@@ -1,4 +1,4 @@
-import React, { useState, type FormEvent } from "react";
+import React, { useEffect, useState, type FormEvent } from "react";
 import emailjs from "@emailjs/browser";
 import { FaDatabase, FaJava, FaMoon, FaSun } from "react-icons/fa";
 import {
@@ -37,6 +37,7 @@ type Project = {
   title: string;
   description: string;
   tags: string[];
+  images: string[];
   github?: string;
   demo?: string;
 };
@@ -59,6 +60,13 @@ const projects: Project[] = [
     description:
       "Fullstack e-commerce system with admin dashboard and order tracking.",
     tags: ["PHP", "SQL", "Bootstrap", "PHPMyAdmin"],
+    images: ["https://res.cloudinary.com/dy49zqykq/image/upload/v1779965164/TestUpload/1.jpg", 
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779965164/TestUpload/2.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779965164/TestUpload/3.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779965164/TestUpload/4.jpg",
+      
+    ],
+
     github: `https://github.com/lhwza007/LazadoProject`,
   },
   {
@@ -66,6 +74,15 @@ const projects: Project[] = [
     description:
       "A fullstack system that matches students with thesis advisors based on shared research interests, featuring an executive dashboard for data tracking.",
     tags: ["PHP", "SQL", "Bootstrap", "PHPMyAdmin"],
+    images: [
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779966151/TestUpload/1.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779966169/TestUpload/2.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779966181/TestUpload/3.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779966201/TestUpload/4.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779966222/TestUpload/5.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779966238/TestUpload/6.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779966253/TestUpload/7.jpg"
+    ],
     github: `https://github.com/Anadyts/AdvisorHub`,
   },
   {
@@ -73,6 +90,15 @@ const projects: Project[] = [
     description:
       "A smart travel platform featuring automated park data scraping and LLM-based data cleaning, with personalized AI recommendations and collaborative trip planning tools.",
     tags: ["React", "Node.js", "REST API", "MySQL"],
+    images: ["https://res.cloudinary.com/dy49zqykq/image/upload/v1779966864/TestUpload/1.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779966905/TestUpload/2.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779966918/TestUpload/3.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779966930/TestUpload/4.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779966930/TestUpload/4.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779966957/TestUpload/6.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779966972/TestUpload/7.jpg",
+      
+    ],
     github: `https://github.com/lhwza007/Travel-Planner`,
   },
   {
@@ -80,13 +106,27 @@ const projects: Project[] = [
     description:
       "Main website of One Siam, a company that sells products and services to the public.",
     tags: ["PHP", "SQL", "PHPMyAdmin", "Docker", "GitLab CI"],
+    images: ["https://res.cloudinary.com/dy49zqykq/image/upload/v1779967368/TestUpload/1.jpg", 
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779967384/TestUpload/2.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779967404/TestUpload/3.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779967419/TestUpload/4.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779967434/TestUpload/5.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779967447/TestUpload/6.jpg",
+    ],
     demo: `https://onesiam.co.th/`,
   },
   {
-    title:"One Siam Factory (Production)",
+    title:"One Siam Factory (Development)",
     description:
       "A business-tailored web application featuring a product catalog system, secure user onboarding via Clerk, and automated order updates powered by LINE Messaging API.",
     tags: ["React", "MongoDB", "Tailwind CSS", "Clerk", "LINE Messaging API","REST API"],
+    images: ["https://res.cloudinary.com/dy49zqykq/image/upload/v1779967877/TestUpload/1.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779967908/TestUpload/2.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779967921/TestUpload/3.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779967941/TestUpload/4.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779967961/TestUpload/5.jpg",
+      
+    ],
     demo: `https://www.onesiamfactory.com/`,
   },
   {
@@ -94,6 +134,15 @@ const projects: Project[] = [
     description:
       "A corporate website for a comprehensive business advisory service, highly optimized for SEO to drive organic traffic and maximize online brand authority.",
     tags: ["React", "MongoDB", "Tailwind CSS", "REST API", "SEO Focused"],
+    images: [
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779968357/TestUpload/1.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779968377/TestUpload/2.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779968386/TestUpload/3.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779968403/TestUpload/4.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779968414/TestUpload/5.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779968424/TestUpload/6.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779968436/TestUpload/7.jpg",
+    ],
     demo: `https://www.ariszathailand.com/`,
   },
   {
@@ -101,6 +150,10 @@ const projects: Project[] = [
     description:
       "An e-learning platform currently in development, built with Next.js and Supabase, featuring secure user onboarding via integrated Google Authentication. ",
     tags: ["Next.js", "SQL","Supabase", "Webhook" ],
+    images: ["https://res.cloudinary.com/dy49zqykq/image/upload/v1779968713/TestUpload/1.jpg", 
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779968740/TestUpload/2.jpg",
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1779968763/TestUpload/3.jpg",
+    ],
     demo: `https://academy.ariszathailand.com/`,
   },
 
@@ -233,8 +286,8 @@ const TechIcon = ({
   return (
     <div
       className={cn(
-        "group flex items-center gap-3 rounded-xl",
-        "border px-4 py-3 transition",
+        "group flex flex-col items-center gap-1.5 rounded-xl text-center",
+        "border px-2.5 py-2 transition md:flex-row md:items-center md:gap-3 md:px-4 md:py-3 md:text-left",
         isLightMode
           ? "border-violet-200 bg-white hover:bg-violet-50 hover:border-violet-300"
           : "border-white/10 bg-black/30 hover:bg-violet-500/10 hover:border-violet-400/20"
@@ -243,7 +296,7 @@ const TechIcon = ({
     >
       <span
         className={cn(
-          "text-xl transition",
+          "text-lg transition md:text-xl",
           isLightMode
             ? "text-violet-600 group-hover:text-violet-700"
             : "text-zinc-200 group-hover:text-violet-200"
@@ -253,7 +306,7 @@ const TechIcon = ({
       </span>
       <span
         className={cn(
-          "text-sm transition",
+          "text-xs leading-tight transition md:text-sm",
           isLightMode
             ? "text-zinc-700 group-hover:text-zinc-900"
             : "text-zinc-300 group-hover:text-white"
@@ -278,6 +331,8 @@ export default function Portfolio() {
     const currentHour = new Date().getHours();
     return currentHour >= 6 && currentHour < 19;
   });
+  const [projectPreviewTick, setProjectPreviewTick] = useState(0);
+  const [isProjectSliding, setIsProjectSliding] = useState(false);
   const [contactForm, setContactForm] = useState<ContactFormState>({
     name: "",
     email: "",
@@ -285,6 +340,22 @@ export default function Portfolio() {
   });
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
   const [submitError, setSubmitError] = useState("");
+
+  useEffect(() => {
+    const slideDurationMs = 650;
+    const visibleDurationMs = 2200;
+
+    const intervalId = window.setInterval(() => {
+      setIsProjectSliding(true);
+
+      window.setTimeout(() => {
+        setProjectPreviewTick((prev) => prev + 1);
+        setIsProjectSliding(false);
+      }, slideDurationMs);
+    }, visibleDurationMs + slideDurationMs);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
 
   const handleContactSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -445,16 +516,17 @@ export default function Portfolio() {
                     )}
                   >
                     <img
-                      src="/profile2.jpg"
+                      // src="/profilev2.png"
+                      src="https://res.cloudinary.com/dy49zqykq/image/upload/h_350,c_scale/v1779963077/TestUpload/profilev2.png"
                       alt="Mark Ratchanon Asasri"
-                      className="h-full w-full scale-110 object-cover object-top"
+                      className="h-full w-full scale-150 object-cover object-top"
                     />
                   </div>
                 </div>
 
-                <h2 className="mt-4 font-semibold text-xl md:mt-5 md:text-2xl">
+                <h1 className="mt-4 font-semibold text-xl md:mt-5 md:text-2xl">
                   Mark Ratchanon Asasri
-                </h2>
+                </h1>
                 <p
                   className={cn(
                     "mt-1 text-sm",
@@ -517,11 +589,11 @@ export default function Portfolio() {
                 Fullstack Developer • React • Node.js
               </p>
 
-              <h1 className="mt-2 text-3xl font-bold leading-tight sm:text-4xl md:mt-3 md:text-5xl">
+              <h2 className="mt-2 text-3xl font-bold leading-tight sm:text-4xl md:mt-3 md:text-5xl">
                 I build
                 <span className="text-violet-400"> scalable </span>
                 fullstack web apps end-to-end.
-              </h1>
+              </h2>
 
               <p className={cn("mt-3 leading-relaxed md:mt-5", isLightMode ? "text-zinc-700" : "text-zinc-300")}>
                 I can independently deliver complete fullstack products, from UI
@@ -625,7 +697,7 @@ export default function Portfolio() {
                   
                 </p>
 
-                <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className="mt-5 grid grid-cols-2 gap-2.5 md:gap-3">
                   {group.items.map((tech) => (
                     <TechIcon
                       key={`${group.title}-${tech.name}`}
@@ -649,8 +721,40 @@ export default function Portfolio() {
           />
 
           <div className="grid gap-5 md:grid-cols-2">
-            {projects.map((p) => (
+            {projects.map((p) => {
+              const currentImage = p.images[projectPreviewTick % p.images.length];
+              const nextImage = p.images[(projectPreviewTick + 1) % p.images.length];
+
+              return (
               <GlassCard key={p.title} className="p-5 md:p-6" isLightMode={isLightMode}>
+                <div
+                  className={cn(
+                    "mb-4 aspect-video w-full overflow-hidden rounded-xl border",
+                    isLightMode
+                      ? "border-violet-200 bg-violet-50"
+                      : "border-white/10 bg-black/40"
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "flex h-full w-[200%]",
+                      isProjectSliding
+                        ? "transition-transform duration-700 ease-in-out -translate-x-1/2"
+                        : "translate-x-0"
+                    )}
+                  >
+                    <img
+                      src={currentImage}
+                      alt={`${p.title} preview`}
+                      className="h-full w-1/2 shrink-0 object-contain"
+                    />
+                    <img
+                      src={nextImage}
+                      alt={`${p.title} preview next`}
+                      className="h-full w-1/2 shrink-0 object-contain"
+                    />
+                  </div>
+                </div>
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-lg font-semibold">{p.title}</p>
@@ -730,7 +834,7 @@ export default function Portfolio() {
                   )}
                 </div>
               </GlassCard>
-            ))}
+            )})}
           </div>
         </section>
 

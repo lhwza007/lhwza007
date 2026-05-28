@@ -1,0 +1,8 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#F5F3FF"/>
+  <rect x="80" y="80" width="1040" height="640" rx="28" fill="#FFFFFF" stroke="#C4B5FD" stroke-width="6" stroke-dasharray="16 16"/>
+  <rect x="528" y="310" width="144" height="108" rx="14" fill="#EDE9FE"/>
+  <path d="M564 385L600 349L634 379L672 340L736 418H464L530 360L564 385Z" fill="#A78BFA"/>
+  <circle cx="686" cy="296" r="22" fill="#C4B5FD"/>
+  <text x="600" y="500" text-anchor="middle" fill="#7C3AED" font-family="Arial, sans-serif" font-size="44" font-weight="700">Project Image Placeholder</text>
+</svg>
