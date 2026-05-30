@@ -109,7 +109,7 @@ const projects: Project[] = [
       "Main website of One Siam, a company that sells products and services to the public.",
     tags: ["PHP", "SQL", "PHPMyAdmin", "Docker", "GitLab CI"],
     images: [
-      "https://res.cloudinary.com/dy49zqykq/image/upload/v1780141004/TestUpload/1_a27ez9.jpg", 
+      "https://res.cloudinary.com/dy49zqykq/image/upload/v1780141007/TestUpload/1_ztd8yd.jpg", 
       "https://res.cloudinary.com/dy49zqykq/image/upload/v1780141040/TestUpload/2_i9wuwd.jpg",
       "https://res.cloudinary.com/dy49zqykq/image/upload/v1780141052/TestUpload/3_obtjdg.jpg",
       "https://res.cloudinary.com/dy49zqykq/image/upload/v1780141063/TestUpload/4_gopfby.jpg",
